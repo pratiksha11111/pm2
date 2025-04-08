@@ -107,7 +107,8 @@ jobs:
             apt update &&
             apt install -y curl unzip git &&
             curl https://bun.sh/install | bash &&
-            source /root/.bun/install/init.sh &&
+            export BUN_INSTALL=\"/root/.bun\" &&
+            export PATH=\"\$BUN_INSTALL/bin:\$PATH\" &&
             bun install &&
             bun run test:e2e &&
             bun run test:unit
