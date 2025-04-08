@@ -1,17 +1,17 @@
 name: Node.js CI
-
-on: [push, pull_request,workflow_dispatch]
-
+ 
+on: [push, pull_request]
+ 
 jobs:
-
+  # Original Node.js tests (native platform)
   node-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
+ 
     strategy:
       matrix:
         node-version: [22.x]
-
+ 
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -29,11 +29,12 @@ jobs:
       run: npm run test:e2e
     - name: Run unit tests
       run: npm run test:unit
-
+ 
+  # Original Bun tests (native platform)
   bun-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
+ 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -45,7 +46,6 @@ jobs:
         if command -v npm &> /dev/null; then
           sudo rm -rf "$(which npm)"
         fi
-
     - name: Setup Bun
       uses: oven-sh/setup-bun@v1
     - name: Install dependencies using Bun
@@ -54,3 +54,61 @@ jobs:
       run: bun run test:e2e
     - name: Run unit tests with Bun
       run: bun run test:unit
+ 
+  # Node.js tests on s390x using QEMU
+  node-tests-s390x:
+    name: Node.js Tests on s390x via QEMU
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+ 
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+ 
+    - name: Enable QEMU for s390x
+      run: docker run --rm --privileged tonistiigi/binfmt:latest --install all
+ 
+    - name: Run Node.js s390x tests in Docker
+      run: |
+        docker run --rm \
+          --platform=linux/s390x \
+          --mount type=bind,source="${PWD}",target=/workspace \
+          --workdir /workspace \
+          ubuntu:22.04 /bin/bash -c "
+            apt update &&
+            apt install -y curl python3 php-cli gnupg &&
+            curl -fsSL https://deb.nodesource.com/setup_22.x | bash - &&
+            apt install -y nodejs &&
+            npm install &&
+            npm run test:e2e &&
+            npm run test:unit
+          "
+ 
+  # Bun tests on s390x using QEMU
+  bun-tests-s390x:
+    name: Bun Tests on s390x via QEMU
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+ 
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+ 
+    - name: Enable QEMU for s390x
+      run: docker run --rm --privileged tonistiigi/binfmt:latest --install all
+ 
+    - name: Run Bun s390x tests in Docker
+      run: |
+        docker run --rm \
+          --platform=linux/s390x \
+          --mount type=bind,source="${PWD}",target=/workspace \
+          --workdir /workspace \
+          ubuntu:22.04 /bin/bash -c "
+            apt update &&
+            apt install -y curl unzip git &&
+            curl https://bun.sh/install | bash &&
+            source /root/.bun/install/init.sh &&
+            bun install &&
+            bun run test:e2e &&
+            bun run test:unit
+          "
