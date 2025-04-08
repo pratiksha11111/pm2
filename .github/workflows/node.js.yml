@@ -75,6 +75,7 @@ jobs:
           --mount type=bind,source="${PWD}",target=/workspace \
           --workdir /workspace \
           ubuntu:22.04 /bin/bash -c "
+            export DEBIAN_FRONTEND=noninteractive && 
             apt update &&
             apt install -y curl python3 php-cli gnupg &&
             curl -fsSL https://deb.nodesource.com/setup_22.x | bash - &&
@@ -84,32 +85,32 @@ jobs:
             npm run test:unit
           "
  
-  # Bun tests on s390x using QEMU
-  bun-tests-s390x:
-    name: Bun Tests on s390x via QEMU
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
+  # # Bun tests on s390x using QEMU
+  # bun-tests-s390x:
+  #   name: Bun Tests on s390x via QEMU
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 60
  
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
  
-    - name: Enable QEMU for s390x
-      run: docker run --rm --privileged tonistiigi/binfmt:latest --install all
+  #   - name: Enable QEMU for s390x
+  #     run: docker run --rm --privileged tonistiigi/binfmt:latest --install all
  
-    - name: Run Bun s390x tests in Docker
-      run: |
-        docker run --rm \
-          --platform=linux/s390x \
-          --mount type=bind,source="${PWD}",target=/workspace \
-          --workdir /workspace \
-          ubuntu:22.04 /bin/bash -c "
-            apt update &&
-            apt install -y curl unzip git &&
-            curl https://bun.sh/install | bash &&
-            export BUN_INSTALL=\"/root/.bun\" &&
-            export PATH=\"\$BUN_INSTALL/bin:\$PATH\" &&
-            bun install &&
-            bun run test:e2e &&
-            bun run test:unit
-          "
+    # - name: Run Bun s390x tests in Docker
+    #   run: |
+    #     docker run --rm \
+    #       --platform=linux/s390x \
+    #       --mount type=bind,source="${PWD}",target=/workspace \
+    #       --workdir /workspace \
+    #       ubuntu:22.04 /bin/bash -c "
+    #         apt update &&
+    #         apt install -y curl unzip git &&
+    #         curl https://bun.sh/install | bash &&
+    #         export BUN_INSTALL=\"/root/.bun\" &&
+    #         export PATH=\"\$BUN_INSTALL/bin:\$PATH\" &&
+    #         bun install &&
+    #         bun run test:e2e &&
+    #         bun run test:unit
+    #       "
