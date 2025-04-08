@@ -37,10 +37,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Run on s390x via QEMU
-      uses: uraimo/run-on-arch-action@v2
+      uses: uraimo/run-on-arch-action@v3
       with:
         arch: s390x
-        distro: ubuntu-latest
+        distro: ubuntu22.04
         githubToken: ${{ github.token }}
         install: |
           apt update
