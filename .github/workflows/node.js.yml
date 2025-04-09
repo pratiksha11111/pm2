@@ -83,6 +83,7 @@ jobs:
             tar -xJf node.tar.xz -C /usr/local/lib/nodejs &&
             export PATH=/usr/local/lib/nodejs/node-v22.0.0-linux-s390x/bin:\$PATH && 
             npm install &&
+            npm run build &&
             npm run test:e2e &&
             npm run test:unit
           "
