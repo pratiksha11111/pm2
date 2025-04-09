@@ -83,8 +83,8 @@ jobs:
             tar -xJf node.tar.xz -C /usr/local/lib/nodejs &&
             export PATH=/usr/local/lib/nodejs/node-v22.0.0-linux-s390x/bin:\$PATH && 
             npm install &&
-            npm run test:e2e | tee test-e2e.log &&
-            npm run test:unit | tee test-unit.log
+            npm run test:e2e -- --timeout 60000 | tee test-e2e.log &&
+            npm run test:unit -- --timeout 60000 | tee test-unit.log
           "
  
   # # Bun tests on s390x using QEMU
