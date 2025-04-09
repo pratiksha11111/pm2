@@ -74,10 +74,10 @@ jobs:
           --platform=linux/s390x \
           --mount type=bind,source="${PWD}",target=/workspace \
           --workdir /workspace \
-          ubuntu:22.04 /bin/bash -c "
+          ubuntu:latest /bin/bash -c "
             export DEBIAN_FRONTEND=noninteractive && 
             apt update &&
-            apt install -y curl python3 php-cli gnupg bc &&
+            apt install -y curl python3 php-cli gnupg bc xz-utils &&
             curl -fsSL https://nodejs.org/dist/v22.0.0/node-v22.0.0-linux-s390x.tar.xz -o node.tar.xz &&
             mkdir -p /usr/local/lib/nodejs &&
             tar -xJf node.tar.xz -C /usr/local/lib/nodejs &&
