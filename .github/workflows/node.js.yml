@@ -74,7 +74,7 @@ jobs:
           --platform=linux/s390x \
           --mount type=bind,source="${PWD}",target=/workspace \
           --workdir /workspace \
-          ubuntu:22.04 /bin/bash -c "
+          ubuntu:latest /bin/bash -c "
             export DEBIAN_FRONTEND=noninteractive && 
             apt update &&
             apt install -y curl python3 php-cli gnupg &&
