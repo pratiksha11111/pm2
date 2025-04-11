@@ -44,7 +44,7 @@ jobs:
         githubToken: ${{ github.token }}
         install: |
           apt update
-          apt install -y curl python3 php-cli bc xz-utils bash which
+          apt install -y curl python3 php-cli bc xz-utils bash
         run: |
           curl -fsSL https://nodejs.org/dist/v22.0.0/node-v22.0.0-linux-s390x.tar.xz -o node.tar.xz
           mkdir -p /usr/local/lib/nodejs 
@@ -52,7 +52,6 @@ jobs:
           export PATH=/usr/local/lib/nodejs/node-v22.0.0-linux-s390x/bin:\$PATH 
           # Install pm2 globally from source
           npm install -g
-          which pm2
           ls -la /home/runner/work/pm2/pm2 || true
           npm run test:e2e
           npm run test:unit
