@@ -65,7 +65,7 @@ jobs:
           # ----------------------------------------------------------------
           # Run‑time (docker run) — your actual test commands
           run: |
-            sudo ln -sf /bin/bash /bin/sh
+            ln -sf /bin/bash /bin/sh
             # grab Node.js s390x binary and unpack
             curl -fsSL https://nodejs.org/dist/v22.0.0/node-v22.0.0-linux-s390x.tar.xz \
               -o node.tar.xz
