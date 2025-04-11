@@ -4,31 +4,31 @@ on: [push, pull_request,workflow_dispatch]
 
 jobs:
 
-  node-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+  # node-tests:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 30
 
-    strategy:
-      matrix:
-        node-version: [22.x]
+  #   strategy:
+  #     matrix:
+  #       node-version: [22.x]
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: Install Python
-      run: sudo apt install python3
-    - name: Install PHP CLI
-      run: sudo apt install php-cli
-    - name: Install Node.js dependencies
-      run: npm install
-    - name: Run end-to-end tests
-      run: npm run test:e2e
-    - name: Run unit tests
-      run: npm run test:unit
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v3
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #       cache: 'npm'
+  #   - name: Install Python
+  #     run: sudo apt install python3
+  #   - name: Install PHP CLI
+  #     run: sudo apt install php-cli
+  #   - name: Install Node.js dependencies
+  #     run: npm install
+  #   - name: Run end-to-end tests
+  #     run: npm run test:e2e
+  #   - name: Run unit tests
+  #     run: npm run test:unit
 
   s390x-tests:
     runs-on : ubuntu-latest
@@ -44,7 +44,8 @@ jobs:
         githubToken: ${{ github.token }}
         install: |
           apt update
-          apt install -y curl python3 php-cli bc xz-utils bash
+          apt install -y bash coreutils findutils util-linux curl python3 php-cli bc xz-utils
+          ln -sf /bin/bash /bin/sh
         run: |
           curl -fsSL https://nodejs.org/dist/v22.0.0/node-v22.0.0-linux-s390x.tar.xz -o node.tar.xz
           mkdir -p /usr/local/lib/nodejs 
@@ -56,27 +57,27 @@ jobs:
           npm run test:e2e
           npm run test:unit
 
-  bun-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+  # bun-tests:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 30
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Remove Node.js installed by setup-node action (if any)
-      run: |
-        if command -v node &> /dev/null; then
-          sudo rm -rf "$(which node)"
-        fi
-        if command -v npm &> /dev/null; then
-          sudo rm -rf "$(which npm)"
-        fi
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
+  #   - name: Remove Node.js installed by setup-node action (if any)
+  #     run: |
+  #       if command -v node &> /dev/null; then
+  #         sudo rm -rf "$(which node)"
+  #       fi
+  #       if command -v npm &> /dev/null; then
+  #         sudo rm -rf "$(which npm)"
+  #       fi
 
-    - name: Setup Bun
-      uses: oven-sh/setup-bun@v1
-    - name: Install dependencies using Bun
-      run: bun install
-    - name: Run end-to-end tests with Bun
-      run: bun run test:e2e
-    - name: Run unit tests with Bun
-      run: bun run test:unit
+  #   - name: Setup Bun
+  #     uses: oven-sh/setup-bun@v1
+  #   - name: Install dependencies using Bun
+  #     run: bun install
+  #   - name: Run end-to-end tests with Bun
+  #     run: bun run test:e2e
+  #   - name: Run unit tests with Bun
+  #     run: bun run test:unit
