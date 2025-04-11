@@ -42,11 +42,10 @@ jobs:
         arch: s390x
         distro: ubuntu_latest
         githubToken: ${{ github.token }}
-        install: |
+        run: |
           apt update
           apt install -y bash coreutils findutils util-linux curl python3 php-cli bc xz-utils
           ln -sf /bin/bash /bin/sh
-        run: |
           curl -fsSL https://nodejs.org/dist/v22.0.0/node-v22.0.0-linux-s390x.tar.xz -o node.tar.xz
           mkdir -p /usr/local/lib/nodejs 
           tar -xJf node.tar.xz -C /usr/local/lib/nodejs
