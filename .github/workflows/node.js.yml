@@ -31,7 +31,7 @@ jobs:
   #     run: npm run test:unit
 
   s390x-tests:
-    runs-on : ubuntu-latest
+    runs-on : ubuntu-20.04
     timeout-minutes: 40
 
     steps:
@@ -40,7 +40,7 @@ jobs:
       uses: uraimo/run-on-arch-action@v3
       with:
         arch: s390x
-        distro: ubuntu_latest
+        distro: ubuntu20.04
         githubToken: ${{ github.token }}
         run: |
           apt update
