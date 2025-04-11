@@ -51,7 +51,10 @@ spec "should have printed the test_val"
 # Compile C Program
 #
 cd $file_path/c-compile
+gcc hello.c -o a.out || { echo "Failed"; exit 1; }
 $pm2 start "cc hello.c; ./a.out" -l c-log.log --merge-logs
-sleep 2
+sleep 5
+echo "---log content---"
+cat c-log.log
 cat c-log.log | grep "Hello World" &> /dev/null
 spec "should have printed compiled output"
