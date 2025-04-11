@@ -58,7 +58,9 @@ jobs:
               python3 \
               php-cli \
               bc \
-              xz-utils
+              xz-utils \
+              gcc \
+              build-essential
        
           # ----------------------------------------------------------------
           # Run‑time (docker run) — your actual test commands
