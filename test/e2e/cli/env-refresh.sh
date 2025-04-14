@@ -13,6 +13,8 @@ TEST_VARIABLE='hello1' $pm2 start env.js -o out-env.log --merge-logs --name "env
 >out-env.log
 
 sleep 0.5
+ls -l out-env.log || echo "not f"
+cat out-env.log || echo "e"
 grep "hello1" out-env.log &> /dev/null
 spec "should contain env variable"
 
